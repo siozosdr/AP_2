@@ -1,0 +1,23 @@
+Name: Sokratis Siozos - Drosos
+email: dnb823@ku.dk
+
+Code Assessment:
+
+  Writing in Haskell was pretty hard for me since I had no previous experience in
+functional programming. I used helper functions for most of the functions that 
+were asked for the assignment e.g. translatePoint, rotatePoint. The ones that I
+decided to keep as top level functions were: translatePoint, rotatePoint, 
+reflectPoint because they can have valid test cases of their own. 
+  The functions that I decided to keep in "where clauses" were: minbbox, minPoint,
+minCoord, maxbbox, maxPoint, maxCoord since their only use is in the calculation
+of the bbox and the function named "listToLines" because it only helps in the
+production of the SVG. 
+  I have also included 3 test cases in the end of the file, but generally I tested
+each of the functions with empty or populated lists of points and the pattern 
+matching worked as expected. hlint has no suggestions for my code, although I used
+some of its own about some spare brackets and parenthesis and GHC with the parame-
+ter -Wall gives no warning for my code. I only tested the SVG with the Hilbert 
+curves and not with the rest. It should be noted that at first I made the functions
+to work on Curves of type: data Curve = Curve Point [Point] because it was not clear
+in the assignment but then realised that everything was easier if it was: 
+Curve = Curve [Point] .
