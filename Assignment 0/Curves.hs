@@ -12,7 +12,7 @@ instance Show Point where
 			x' = fromIntegral (round (x * 1000) :: Integer) / 1000
 	      		y' = fromIntegral (round (y * 1000) :: Integer) / 1000	
 
-
+data Point = Point Double Double
 point :: (Double, Double) -> Point
 
 pointx :: Point -> Double
@@ -32,19 +32,20 @@ rotate (Curve (Point x y : pl)) deg = Curve (map(rotatePoint deg) pl)
 
 -- helper function for rotate
 -- rotates a single point based on a double d
-rotatePoint :: double -> Point -> Point
-rotatePoint d (Point x y) = (Point x' y')
-	where
-		r  = deg * pi / 180
-    	x' = x * cos r + y * sin r
-    	y' = y * cos r - x * sin r 
+rotatePoint :: Double -> Point -> Point
+rotatePoint deg (Point x y) = Point x' y'
+  -- convertion of degrees to radians
+  where 
+    r  = deg * pi / 180
+    x' = x * cos r + y * sin r
+    y' = y * cos r - x * sin r 
 
 translate :: Curve -> Point -> Curve
 translate (Curve []) _ = (Curve [])
 translate (Curve (Point x y: pl)) (Point px py) = Curve $ map (translatePoint tv) (Point x y: pl)
-	where 
-		--translation vector
-		tv = Point (px - x) (py - y)
+  where 
+    --translation vector
+    tv = Point (px - x) (py - y)
 
 -- helper for translate
 translatePoint :: Point -> Point -> Point
@@ -53,7 +54,14 @@ translatePoint (Point x y) (Point tx ty) = Point (x+tx) (y+ty)
 data Line = Vertical Double | Horizontal Double
 
 reflect :: Curve -> Line -> Curve
+reflect (Curve c) l = Curve (map(reflectPoint l) c)
+
+--helper function for reflect
+reflectPoint :: Line -> Point -> Point
+reflectPoint Vertical d (Point x y) = Point (x - 2*(x - d)) y
+reflectPoint Horizontal d (Point x y) = Point x (y - 2*(y - d))
 
 bbox :: Curve -> (Point, Point)
 
 toList :: Curve -> [Point]
+toList (Curve pl) = pl
