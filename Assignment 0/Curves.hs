@@ -14,11 +14,12 @@ instance Show Point where
 
 data Point = Point Double Double
 point :: (Double, Double) -> Point
+point (x,y) = Point x y 
 
 pointx :: Point -> Double
-
+pointx (Point x _) = x
 pointy :: Point -> Double
-
+pointy (Point _ y) = y
 data Curve = Curve [Point]
 curve :: Point -> [Point] -> Curve
 curve p lp = Curve (p:lp)
@@ -27,7 +28,7 @@ connect :: Curve -> Curve -> Curve
 connect (Curve c1) (Curve c2) = Curve (c1 ++ c2)
 
 rotate :: Curve -> Double -> Curve
-rotate (Curve []) _ = (Curve [])
+rotate Curve [] _ = (Curve [])
 rotate (Curve (Point x y : pl)) deg = Curve (map(rotatePoint deg) pl)
 
 -- helper function for rotate
@@ -41,7 +42,7 @@ rotatePoint deg (Point x y) = Point x' y'
     y' = y * cos r - x * sin r 
 
 translate :: Curve -> Point -> Curve
-translate (Curve []) _ = (Curve [])
+translate Curve [] _ = (Curve [])
 translate (Curve (Point x y: pl)) (Point px py) = Curve $ map (translatePoint tv) (Point x y: pl)
   where 
     --translation vector
@@ -61,7 +62,7 @@ reflectPoint :: Line -> Point -> Point
 reflectPoint Vertical d (Point x y) = Point (x - 2*(x - d)) y
 reflectPoint Horizontal d (Point x y) = Point x (y - 2*(y - d))
 
-bbox :: Curve -> (Point, Point)
+--bbox :: Curve -> (Point, Point)
 
 toList :: Curve -> [Point]
 toList (Curve pl) = pl
